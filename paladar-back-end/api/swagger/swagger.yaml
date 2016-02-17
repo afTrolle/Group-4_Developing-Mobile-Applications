@@ -1,0 +1,467 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Paladar Back-end API
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /client:
+    post:
+      summary: adds a new client to databse
+      description: ""
+      operationId: addClient
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Client Object that needs to be added to the store
+          required: false
+          schema:
+            $ref: "#/definitions/Client"
+      responses:
+        "404":
+          description: invalid input
+
+    put:
+      summary: update a exisiting client to databse
+      description: ""
+      operationId: updateClient
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Client Object that needs to be updated
+          required: false
+          schema:
+            $ref: "#/definitions/Client"
+      responses:
+        "404":
+          description: invalid input
+        "400":
+          description: client not found
+  
+  /client/{clientId}:
+    get:
+      summary: get client by id
+      description: ""
+      operationId: getClientById
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: clientId
+          description: ID of client that is to be fetched
+          required: true
+          type: integer
+          format: int64
+      responses:
+        "404":
+          description: invalid input
+        "200":
+          description: sucessful operation
+          schema:
+            $ref: "#/definitions/Client"
+        "400":  
+          description: client not found
+          
+  /dining/event:
+    post:
+      summary: create dining event
+      description: ""
+      operationId: createDiningEvent
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: diningEvent Object that needs to be added to the store
+          required: false
+          schema:
+            $ref: "#/definitions/DiningEvent"
+      responses:
+        "404":
+          description: invalid input
+        "200":
+          description: sucessful operation created dining event
+          schema:
+            $ref: "#/definitions/DiningEvent"
+      
+  /dining/event/{diningId}:
+    get:
+      summary: find dining event object by  dining evntID 
+      description: ""
+      operationId: findDiningEventbyId
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: diningId
+          description: ID of dining event
+          required: true
+          type: integer
+          format: int32
+      responses:
+        "400":
+          description: dining event not found
+        "200":
+          description: sucesful operation fiding dining event
+          schema:
+            $ref: "#/definitions/DiningEvent"
+        "404":
+          description: invalid input
+      
+    delete:
+      summary: delete dining event
+      description: ""
+      operationId: deleteDiningEvent
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: diningId
+          description: dining event id that should be removed
+          required: true
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: sucessful operation
+        "404":
+          description: invalid input
+        "400":
+          description: dining event not found
+    
+  /dining/events/{chefId}:
+    get:
+      summary: get array of dining event objects by clientId
+      description: use client id for finding what dining events that this client will and has hosted.
+      operationId: getDiningEventsByChefId
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: chefId
+          description: same as clientId, ID of the client that hosts the events
+          required: true
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: sucess
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/DiningEvent"
+        "400":
+          description: Client not found
+        "404":
+          description: invalid input
+    
+  /dining/attending/{clientId}:
+    get:
+      summary: get array of events that the client has signed up too.
+      description: ""
+      operationId: getAttendingDiningEventsByClientId
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: clientId
+          description: user client ID
+          required: true
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: sucess
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/DiningEvent"
+        "400":
+          description: Client not found
+        "404":
+          description: invalid input
+          
+  /dining/attending:
+    #create attend entry  dining event 
+    post:
+      summary: create attending entry to dining 
+      description: ""
+      operationId: addAttendEntry
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: containts input
+          required: false
+          schema:
+            type: object
+            properties:
+              clientIds:
+                type: integer
+                format: int64
+              diningId:
+                type: integer
+                format: int64
+      responses:
+        "200":
+          description: operation sucefull returns dining event
+          schema:
+            $ref: "#/definitions/DiningEvent"
+        "400":
+          description: Client not found
+        "401":
+          description: dining event not found
+        "404":
+          description: invalid input
+        
+        
+          
+          
+          
+  
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+# 
+# Schemas!
+definitions:
+
+# main Client 
+  Client:
+    type: object
+    uniqueItems: true
+    required:
+      - clientId
+    properties:
+      clientId:
+        type: integer
+        format: int64
+        description: unique user id, will probably be Oauthtoken from google api or something else
+      firstName:
+        type: string
+        description: users first name
+      lastName:
+        type: string
+        description: users last name
+      email:
+        type: string
+        description:  users email address.
+      image:
+        type: string
+        format: binary
+        description: contains user Image (might not be needed)
+      Chef:
+        $ref: "#/definitions/Chef"
+    description: Client object repsents a user client by paladar. every client should be identifiable by their client id or email address
+    
+# Chef inforamtion holder will hold infromation about being a chef
+  Chef:
+    type: object
+    properties:
+      alias:
+        type: string
+        description: the nick name of the chef (optional)
+      summary:
+        type: string
+        description: summary about the chef sort of a CV where he/she can brage about them selfs
+      image:
+        type: string
+        format: binary
+        description: chef image that is presented when viewing dining events
+    description: holds all the chef related information. MAY be null if client isn't a chef.
+
+    
+#Dining event Main object
+  DiningEvent:
+    type: object
+    required: #maybe more is neeeded
+      - title
+    properties:
+      diningId:
+        type: integer
+        format: int64
+        description: unique identifier of the event. (generated on creation)
+      host-id:
+        type: integer
+        format: int64
+        description: unique identifier of the owner of the event aka client-id.
+      title:
+        type: string
+        description: the event title. 
+      summary:
+        type: string
+        description: should contain short summary of the event. (what food will be given)
+      image:
+        type: string
+        format: binary
+        description: preferably image of the dish for the event
+      date:
+        type: string
+        format: date
+        description: time when the event starts
+      lenght:
+        type: integer
+        format: int32
+        minimum: 0
+        maximum: 300 
+        description: Event lenght in minutes. must be a vaule betwen 0 and 300
+      seats:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 1000
+        description: amount of people that can attend the event. must be a value betwen 1 and 1000.
+      price:
+        type: integer
+        format: int32
+        minimum: 0
+        maximum: 10000000
+        description: Price of the event, MUST be betwen 0 and 10000000
+      Home:
+        $ref: "#/definitions/Home"
+      allergies:
+        $ref: "#/definitions/FoodAllergies"
+      diets:
+        $ref: "#/definitions/FoodDiet"
+      Attendies:
+        type: array
+        items: 
+          $ref: "#/definitions/Client"
+    description: this object repsents an event that a chef has created. 
+        
+  Home:
+    type: object
+    properties:
+      summary:
+        type: string
+        description: A small description about the location of the event.
+      image:
+        type: string
+        format: binary
+        description: image of the home showcasing the persons home.
+      
+      location:
+        type: object
+        properties:
+          streetAddress:
+            type: string
+          floor: 
+            type: integer
+            format: int32
+            minimum: -20
+            maximum: 1000
+            description: floor of the event.
+          lat:
+            type: number
+            format: double
+            description: latitude of location.
+          lng:
+            type: number
+            format: double
+            description: longitude of location.
+      HomePreferences:
+        $ref: "#/definitions/HomePreferences"
+    description: Holds Location information about the event.
+    
+  HomePreferences:
+    type: object
+    properties:
+      isChildrenAllowed:
+        type: boolean
+        description: if it is allowed to bring children to the event.
+      isDogsAllowed:
+        type: boolean
+      isCatsAllowed:
+        type: boolean
+      isOtherPetsAllowed:
+        type: boolean
+      isAlcoholAllowed:
+        type: boolean
+        description: if a client can bring alcohol. 
+      isDogOnLocation:
+        type: boolean
+        description: Will there be dogs present on the event
+      isCatOnLocation:
+        type: boolean
+        description: Will there be cat present on the event
+      isOtherPetOnLocation:
+        type: boolean
+        description: Will there be other pet present on the event
+      isChildrenOnLocation:
+        type: boolean
+        description: will there be children on the event
+    description: indication what is persent and what is allowed. 
+    
+
+  FoodAllergies:
+    type: object
+    properties:
+      lactose:
+        type: boolean
+      gluten:
+        type: boolean
+      eggs:
+        type: boolean
+      nuts:
+        type: boolean
+      soy:
+        type: boolean
+      fish:
+        type: boolean
+      shellfish:
+        type: boolean
+      chicken:
+        type: boolean
+      pork:
+        type: boolean
+      veal:
+        type: boolean
+      beef:
+        type: boolean
+      turkey:
+        type: boolean
+      duck:
+        type: boolean
+    description: list of what the event dish may contain. used for filtering.
+    
+  FoodDiet:
+    type: object
+    properties:
+      vegetarian:
+        type: boolean
+      vegan:
+        type: boolean
+      rawFood:
+        type: boolean
+      mediterranean:
+        type: boolean
+      Halal:
+        type: boolean
+    description: diffrent food diets might be skiped. 
+    
