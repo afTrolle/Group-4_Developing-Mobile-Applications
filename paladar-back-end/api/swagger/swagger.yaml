@@ -10,7 +10,6 @@ basePath: /
 schemes:
   # tip: remove http to make production-grade
   - http
-  - https
 # format of bodies a client can send (Content-Type)
 consumes:
   - application/json
@@ -19,245 +18,59 @@ produces:
   - application/json
 paths:
   /client:
+    x-swagger-router-controller: client
+    
     post:
-      summary: adds a new client to databse
-      description: ""
-      operationId: addClient
-      consumes:
-        - application/json
-      produces:
-        - application/json
+      summary: Create Client
+      description: creates client by recvining client object and sets an clientId and returns the completed object to client.
+      operationId: createClient
       parameters:
-        - in: body
-          name: body
-          description: Client Object that needs to be added to the store
-          required: false
-          schema:
-            $ref: "#/definitions/Client"
-      responses:
-        "404":
-          description: invalid input
-
-    put:
-      summary: update a exisiting client to databse
-      description: ""
-      operationId: updateClient
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: Client Object that needs to be updated
-          required: false
-          schema:
-            $ref: "#/definitions/Client"
-      responses:
-        "404":
-          description: invalid input
-        "400":
-          description: client not found
-  
-  /client/{clientId}:
-    get:
-      summary: get client by id
-      description: ""
-      operationId: getClientById
-      produces:
-        - application/json
-      parameters:
-        - in: path
-          name: clientId
-          description: ID of client that is to be fetched
+        - name: client
+          in: body
           required: true
+          description: client object
+          schema:
+            $ref: "#/definitions/Client"
+      responses:
+        200:
+          description: Sucessfull
+          schema: 
+            $ref:  "#/definitions/Client"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    get:
+      summary: get client by Id
+      description: returns client object
+      operationId: getClientById
+      parameters:
+        - name: id
+          in: query
+          description: Id of the client
+          required: false
           type: integer
           format: int64
       responses:
-        "404":
-          description: invalid input
-        "200":
-          description: sucessful operation
+        200:
+          description: Sucessfull
+          schema: 
+            $ref:  "#/definitions/Client"
+        default:
+          description: Error
           schema:
-            $ref: "#/definitions/Client"
-        "400":  
-          description: client not found
-          
-  /dining/event:
-    post:
-      summary: create dining event
-      description: ""
-      operationId: createDiningEvent
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: diningEvent Object that needs to be added to the store
-          required: false
-          schema:
-            $ref: "#/definitions/DiningEvent"
-      responses:
-        "404":
-          description: invalid input
-        "200":
-          description: sucessful operation created dining event
-          schema:
-            $ref: "#/definitions/DiningEvent"
-      
-  /dining/event/{diningId}:
-    get:
-      summary: find dining event object by  dining evntID 
-      description: ""
-      operationId: findDiningEventbyId
-      produces:
-        - application/json
-      parameters:
-        - in: path
-          name: diningId
-          description: ID of dining event
-          required: true
-          type: integer
-          format: int32
-      responses:
-        "400":
-          description: dining event not found
-        "200":
-          description: sucesful operation fiding dining event
-          schema:
-            $ref: "#/definitions/DiningEvent"
-        "404":
-          description: invalid input
-      
-    delete:
-      summary: delete dining event
-      description: ""
-      operationId: deleteDiningEvent
-      produces:
-        - application/json
-      parameters:
-        - in: path
-          name: diningId
-          description: dining event id that should be removed
-          required: true
-          type: integer
-          format: int32
-      responses:
-        "200":
-          description: sucessful operation
-        "404":
-          description: invalid input
-        "400":
-          description: dining event not found
-    
-  /dining/events/{chefId}:
-    get:
-      summary: get array of dining event objects by clientId
-      description: use client id for finding what dining events that this client will and has hosted.
-      operationId: getDiningEventsByChefId
-      produces:
-        - application/json
-      parameters:
-        - in: path
-          name: chefId
-          description: same as clientId, ID of the client that hosts the events
-          required: true
-          type: integer
-          format: int32
-      responses:
-        "200":
-          description: sucess
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/DiningEvent"
-        "400":
-          description: Client not found
-        "404":
-          description: invalid input
-    
-  /dining/attending/{clientId}:
-    get:
-      summary: get array of events that the client has signed up too.
-      description: ""
-      operationId: getAttendingDiningEventsByClientId
-      produces:
-        - application/json
-      parameters:
-        - in: path
-          name: clientId
-          description: user client ID
-          required: true
-          type: integer
-          format: int32
-      responses:
-        "200":
-          description: sucess
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/DiningEvent"
-        "400":
-          description: Client not found
-        "404":
-          description: invalid input
-          
-  /dining/attending:
-    #create attend entry  dining event 
-    post:
-      summary: create attending entry to dining 
-      description: ""
-      operationId: addAttendEntry
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: containts input
-          required: false
-          schema:
-            type: object
-            properties:
-              clientIds:
-                type: integer
-                format: int64
-              diningId:
-                type: integer
-                format: int64
-      responses:
-        "200":
-          description: operation sucefull returns dining event
-          schema:
-            $ref: "#/definitions/DiningEvent"
-        "400":
-          description: Client not found
-        "401":
-          description: dining event not found
-        "404":
-          description: invalid input
-        
-        
+            $ref: "#/definitions/Error"
           
           
-          
-  
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
-# 
 # Schemas!
 definitions:
 
 # main Client 
   Client:
     type: object
-    uniqueItems: true
-    required:
-      - clientId
     properties:
       clientId:
         type: integer
@@ -417,7 +230,6 @@ definitions:
         type: boolean
         description: will there be children on the event
     description: indication what is persent and what is allowed. 
-    
 
   FoodAllergies:
     type: object
@@ -465,3 +277,17 @@ definitions:
         type: boolean
     description: diffrent food diets might be skiped. 
     
+    #Error handling
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+
+
+        
+
+

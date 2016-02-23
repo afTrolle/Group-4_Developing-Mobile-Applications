@@ -17,6 +17,11 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
   var port = process.env.PORT || 10010;
   app.listen(port);
 
+    // Serve the Swagger documents and Swagger UI
+  //   http://localhost:3000/docs => Swagger UI
+  //   http://localhost:3000/api-docs => Swagger document
+  app.use(middleware.swaggerUi());
+
   if (swaggerExpress.runner.swagger.paths['/hello']) {
     console.log('try this:\ncurl http://127.0.0.1:' + port + '/hello?name=Scott');
   }

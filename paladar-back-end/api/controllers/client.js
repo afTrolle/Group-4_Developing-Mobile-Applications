@@ -25,7 +25,7 @@ var util = require('util');
   we specify that in the exports of this module that 'hello' maps to the function named 'hello'
  */
 module.exports = {
-  hello: hello
+  getClientById: getClientById
 };
 
 /*
@@ -34,11 +34,28 @@ module.exports = {
   Param 1: a handle to the request object
   Param 2: a handle to the response object
  */
-function hello(req, res) {
-  // variables defined in the Swagger document can be referenced using req.swagger.params.{parameter_name}
-  var name = req.swagger.params.name.value || 'stranger';
-  var hello = util.format('Hello, %s!', name);
+function getClientById(req, res) {
+
+var idreq = req.swagger.params.id.value;
+ // variables defined in the Swagger document can be referenced using req.swagger.params.{parameter_name}
+
+var examples = {
+  "firstName" : "John",
+  "lastName" : "Doe",
+  "image" : "",
+  "clientId" : idreq,
+  "Chef" : {
+    "summary" : "",
+    "image" : "",
+    "alias" : ""
+  },
+  "email" : "john.doe@gmail.com"
+};
+
+console.log(util.inspect(req.swagger.params, false, null));
+
+  console.log("requests client by %d id", idreq);
 
   // this sends back a JSON response which is a single string
-  res.json(hello);
+  res.json(examples);
 }
