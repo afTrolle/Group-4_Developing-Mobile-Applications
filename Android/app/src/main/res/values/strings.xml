@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Paladar</string>
+
+    <!-- facebook api key for login -->
+    <string name="facebook_app_id">1582641222010883</string>
+
+
+    <!--Navigation drawer strings  -->
+    <string name="drawer_section_paladar">Paladar</string>
+    <string name="drawer_item_search">Search</string>
+    <string name="drawer_item_filter">Filter</string>
+    <string name="drawer_item_reservation">reservations</string>
+    <string name="drawer_section_ChefOptions">Chef options</string>
+    <string name="drawer_item_createHome">Create Home</string>
+    <string name="drawer_item_createEvent">Create Event</string>
+    <string name="drawer_section_userSettings">User options</string>
+    <string name="drawer_item_settings">Settings</string>
+
+    <!-- change if person is signed in or out -->
+    <string name="drawer_item_sign_in">Sign In</string>
+    <string name="drawer_item_sign_out">Sign Out</string>
+
+
+    <!-- Settings Strings -->
+    <string name="settings_test">hello world</string>
+    <string name="pref_category_title_settings">awesome first!</string>
+    <string name="pref_title_settings">hellowrold</string>
+
+</resources>
