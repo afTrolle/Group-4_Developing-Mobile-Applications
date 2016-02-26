@@ -5,29 +5,60 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- how too define more settings http://developer.android.com/guide/topics/ui/settings.html -->
-    <PreferenceCategory
-        android:title="@string/pref_category_title_settings"
-     >
 
-        <CheckBoxPreference
-            android:key="pref sync"
-            android:title="@string/pref_title_settings"
-            android:defaultValue="true"/>
+    <PreferenceCategory android:title="@string/pref_category_title_user">
+
+        <EditTextPreference
+            android:title="Email Address"
+            android:inputType="textEmailAddress"
+            android:key="prefEmail"
+            />
+
     </PreferenceCategory>
 
 
     <PreferenceCategory  android:title="Chef">
 
+        <CheckBoxPreference
+            android:title="@string/pref_switch_become_chef"
+            android:disableDependentsState="false"
+            android:key="ChefStatus"
+            android:defaultValue="false"
+           />
+
+
+
         <PreferenceScreen android:title="Chef settings"
             android:key="prefs"
-            android:summary="stuff happens here">
-            <CheckBoxPreference android:title="are you a chef?"
-                android:key="sucess"/>
-            <CheckBoxPreference android:title="pussy"
-                android:key="pussy1"/>
+            android:summary="stuff happens here"
+            android:dependency="ChefStatus">
+
+            <PreferenceCategory  android:title="Chef Options"
+                android:summary="Information that will be given on your events">
+
+                <EditTextPreference
+                    android:title="Chef Alias"
+                    android:summary="Short nick name for people too see"
+                    android:key="ChefAlias"
+                    android:inputType="textPersonName"
+                    android:maxLength="10"
+                    android:maxLines="1"
+                    />
+
+                <EditTextPreference
+                    android:title="Chef Summary"
+                    android:key="ChefSummary"
+                    android:summary="Write short a little about your self and your cooking"
+                    android:inputType="textMultiLine"
+                    />
+
+                <Preference android:title="Chef Image"
+                    android:summary="Image that will be shown next too your event."
+                    android:key="ChefImage"/>
+
+            </PreferenceCategory>
 
         </PreferenceScreen>
-
 
     </PreferenceCategory>
 </PreferenceScreen>

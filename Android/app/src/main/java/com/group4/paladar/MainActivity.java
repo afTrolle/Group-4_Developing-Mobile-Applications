@@ -1,24 +1,27 @@
 package com.group4.paladar;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.ui.auth.core.FirebaseLoginBaseActivity;
 import com.firebase.ui.auth.core.FirebaseLoginError;
-import com.group4.paladar.FireBaseLogic.FireBaseLoginHelper;
 import com.group4.paladar.FireBaseLogic.FirebaseHelper;
+import com.group4.paladar.FireBaseLogic.UserHelper;
 import com.group4.paladar.Fragments.FragmentHandler;
 import com.group4.paladar.Fragments.views.SearchFragment;
 import com.group4.paladar.Fragments.views.SettingsFragment;
 import com.group4.paladar.Navigation.ToolbarHelper;
 
-public class MainActivity extends FirebaseLoginBaseActivity implements ToolbarHelper.onNavigationItemClicked {
+public class MainActivity extends FirebaseLoginBaseActivity implements ToolbarHelper.onNavigationItemClicked, SharedPreferences.OnSharedPreferenceChangeListener {
 
     //Firebase Tools
     private FirebaseHelper firebaseHelper = new FirebaseHelper();
-    private FireBaseLoginHelper fireBaseLoginHelper = new FireBaseLoginHelper();
+    private UserHelper userHelper = new UserHelper();
 
     //Navigation tools
     private ToolbarHelper toolbarHelper = new ToolbarHelper();
@@ -35,6 +38,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements ToolbarHe
         toolbarHelper.onCreate(this, savedInstanceState);
         toolbarHelper.setOnNavigationItemListener(this);
         fHandler.onCreate(this);
+        userHelper.onCreate(this);
 
         //make sure it's first time starting, avoid multiple layers of fragments
         if (savedInstanceState == null){
@@ -51,6 +55,10 @@ public class MainActivity extends FirebaseLoginBaseActivity implements ToolbarHe
 
         //sets up login providers (Facebook & Google)
         firebaseHelper.onStart(this);
+
+       SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPref.registerOnSharedPreferenceChangeListener( this);
+
     }
 
 
@@ -65,25 +73,27 @@ public class MainActivity extends FirebaseLoginBaseActivity implements ToolbarHe
     //means that login failed with some provider error (google or facebook)
     @Override
     protected void onFirebaseLoginProviderError(FirebaseLoginError firebaseLoginError) {
-        fireBaseLoginHelper.onFirebaseLoginProviderError(this, firebaseLoginError);
+        //TODO handle error
     }
 
     // user error user did something (canceled login?)
     @Override
     protected void onFirebaseLoginUserError(FirebaseLoginError firebaseLoginError) {
-        fireBaseLoginHelper.onFirebaseLoginUserError(this, firebaseLoginError);
+        //TODO handle error
     }
 
     //called when login is was successful
     @Override
     protected void onFirebaseLoggedIn(AuthData authData) {
         super.onFirebaseLoggedIn(authData);
-        fireBaseLoginHelper.onFirebaseLoggedIn(this, authData);
 
-        //generate user profile header for navigation drawer
-        toolbarHelper.SetUserProfile(fireBaseLoginHelper.getUserObject());
+        //handles stuff!
+        userHelper.onFirebaseLoggedIn(this, authData, toolbarHelper);
+
         //change sign in navigation item Text to sign out
         toolbarHelper.setSignOut();
+
+
 
     }
 
@@ -91,7 +101,9 @@ public class MainActivity extends FirebaseLoginBaseActivity implements ToolbarHe
     @Override
     protected void onFirebaseLoggedOut() {
         super.onFirebaseLoggedOut();
-        fireBaseLoginHelper.onFirebaseLoggedOut(this);
+
+        //do sign out clean up. (clear settings)
+        userHelper.onFirebaseLoggedOut(this);
 
         //remove navigation drawer profile
         toolbarHelper.removeUserProfile();
@@ -138,7 +150,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements ToolbarHe
      */
     @Override
     public void onSign() {
-        if (fireBaseLoginHelper.isUserSignedIn()){
+        if (userHelper.isUserSignedIn()){
             //user is signed in, start signout process
             logout();
         } else {
@@ -147,8 +159,20 @@ public class MainActivity extends FirebaseLoginBaseActivity implements ToolbarHe
         }
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Toast.makeText(this,"prefsupdate",Toast.LENGTH_SHORT).show();
+        userHelper.newPreferenceSet(sharedPreferences,  key,this);
 
 
+    }
+
+    /* User Prefernces has been updated localy need to send changes to server also!
+    @Override
+    public void onNewPreference(Preference preference, Object newValue) {
+        Toast.makeText(this,"prefsupdate",Toast.LENGTH_SHORT).show();
+    }
+*/
   /*  -------------------------------- OTHER ------------------------------------------------- */
 
 }

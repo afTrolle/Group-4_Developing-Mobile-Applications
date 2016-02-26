@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.group4.paladar.FireBaseStructures.user.User;
+import com.group4.paladar.FireBaseStructures.user.UserFirebase;
 import com.group4.paladar.MainActivity;
 import com.group4.paladar.R;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -173,10 +173,10 @@ public class ToolbarHelper implements Drawer.OnDrawerItemClickListener, AccountH
 
 
 
-    public void SetUserProfile(User userObject) {
+    public void SetUserProfile(UserFirebase userObject) {
         //if existing user profile on remove them.
         headerResult.clear();
-        profile = new ProfileDrawerItem().withName(userObject.getDisplayName()).withEmail(userObject.getEmail()).withIcon(userObject.getProfileImageURL()).withIdentifier(100);
+        profile = new ProfileDrawerItem().withName(userObject.getDisplayName()).withEmail(userObject.getEmail()).withIcon(userObject.getProfileImageUrl()).withIdentifier(100);
         headerResult.addProfile(profile, 0);
     }
 

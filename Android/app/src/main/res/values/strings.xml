@@ -20,10 +20,18 @@
     <string name="drawer_item_sign_in">Sign In</string>
     <string name="drawer_item_sign_out">Sign Out</string>
 
-
     <!-- Settings Strings -->
-    <string name="settings_test">hello world</string>
+    <string name="pref_category_title_user">User Settings</string>
     <string name="pref_category_title_settings">awesome first!</string>
     <string name="pref_title_settings">hellowrold</string>
+    <string name="pref_switch_become_chef">Become Chef</string>
+    
+    <!-- Alert message strings -->
+    <string name="alert_chef_title">Warning Becoming a Chef</string>
+    <string name="alert_chef_message">Warning You\'re about become a Chef, Link here for legal stuff </string>
+    <string name="alert_okay">Ok</string>
+    <string name="alert_cancel">Cancel</string>
+
+
 
 </resources>

@@ -1,8 +1,21 @@
 package com.group4.paladar.FireBaseLogic;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
+
+import com.firebase.client.AuthData;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.firebase.ui.auth.core.AuthProviderType;
 import com.firebase.ui.auth.core.FirebaseLoginBaseActivity;
+import com.group4.paladar.FireBaseStructures.user.UserFirebase;
+import com.group4.paladar.MainActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Surface on 2016-02-23.
