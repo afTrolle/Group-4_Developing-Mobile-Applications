@@ -68,6 +68,9 @@ public class ToolbarHelper implements Drawer.OnDrawerItemClickListener, AccountH
      * */
     private onNavigationItemClicked handler;
 
+    public Drawer getNavigationDrawer() {
+        return result;
+    }
 
 
     public interface onNavigationItemClicked {
@@ -196,7 +199,6 @@ public class ToolbarHelper implements Drawer.OnDrawerItemClickListener, AccountH
         item_reservation = new PrimaryDrawerItem().withName(R.string.drawer_item_reservation).withIcon(GoogleMaterial.Icon.gmd_calendar_note).withIdentifier(3);
         //chef options
         sectionChef =  new SectionDrawerItem().withName(R.string.drawer_section_ChefOptions).withIdentifier(21);
-        item_createHome = new PrimaryDrawerItem().withName(R.string.drawer_item_createHome).withIcon(GoogleMaterial.Icon.gmd_home).withIdentifier(4);
         item_createEvent = new PrimaryDrawerItem().withName(R.string.drawer_item_createEvent).withIcon(GoogleMaterial.Icon.gmd_calendar).withIdentifier(5);
         //account stuff
         SectionDrawerItem sectionSettings =  new SectionDrawerItem().withName(R.string.drawer_section_userSettings).withIdentifier(22);;
@@ -218,16 +220,15 @@ public class ToolbarHelper implements Drawer.OnDrawerItemClickListener, AccountH
         result.addItem(sectionSettings);
         result.addItem(item_settings);
         result.addItem(item_sign);
-
     }
 
     public void enableChefOptions(){
-        result.addItemsAtPosition(4, sectionChef,item_createHome,item_createEvent);
-
+        result.removeItems(21,  5);
+        result.addItemsAtPosition(5, sectionChef,item_createEvent);
     }
 
     public void disableChefOptions(){
-        result.removeItems(21, 4, 5);
+        result.removeItems(21,  5);
     }
 
     //this is called when Navigation drawer items are clicked
@@ -290,7 +291,6 @@ public class ToolbarHelper implements Drawer.OnDrawerItemClickListener, AccountH
         result.updateItem(item_sign);
     }
 
-
     //account clicked or changed
     //maybe link to settings?
     @Override
@@ -298,4 +298,7 @@ public class ToolbarHelper implements Drawer.OnDrawerItemClickListener, AccountH
         //TODO add link to settings
         return false;
     }
+
+
+
 }

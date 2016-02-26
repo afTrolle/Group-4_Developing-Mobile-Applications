@@ -123,7 +123,6 @@ public class UserFirebase {
         }
     }
 
-
     public void setProvider(String provider) {
         this.provider = provider;
     }
@@ -139,5 +138,7 @@ public class UserFirebase {
     public void setProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
     }
+
+
 
 }

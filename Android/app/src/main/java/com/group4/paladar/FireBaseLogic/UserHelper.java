@@ -50,6 +50,7 @@ public class UserHelper {
                     Log.i("Signin", "User exists in database");
                     //LoadSettings!
 
+
                     //downloaded user settings from web!
                     user = snapshot.getValue(UserFirebase.class);
 
@@ -59,6 +60,10 @@ public class UserHelper {
                     user = addUserToDatabse(authData);
                 }
 
+
+                if(user.getChef().getIsChefEnabled()){
+                    mActivity.toolbarHelper.enableChefOptions();
+                }
                 setPreferences(user, mActivity);
 
 
@@ -122,6 +127,7 @@ public class UserHelper {
 
     public void onFirebaseLoggedOut(MainActivity mainActivity) {
         userSignedIn = false;
+        mainActivity.toolbarHelper.disableChefOptions();
     }
 
 
@@ -136,7 +142,12 @@ public class UserHelper {
 
             } else if (key.equals("ChefStatus"))
             {
-                user.getChef().setIsChefEnabled(preference.getBoolean(key,false));
+                user.getChef().setIsChefEnabled(preference.getBoolean(key, false));
+                if (user.getChef().getIsChefEnabled()){
+                    mAcivity.toolbarHelper.enableChefOptions();
+                } else {
+                    mAcivity.toolbarHelper.disableChefOptions();
+                }
             } else if (key.equals("ChefAlias"))
             {
                 user.getChef().setAlias( preference.getString(key,"N/A"));

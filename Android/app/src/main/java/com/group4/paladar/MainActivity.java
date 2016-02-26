@@ -2,7 +2,6 @@ package com.group4.paladar;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
@@ -13,6 +12,7 @@ import com.firebase.ui.auth.core.FirebaseLoginError;
 import com.group4.paladar.FireBaseLogic.FirebaseHelper;
 import com.group4.paladar.FireBaseLogic.UserHelper;
 import com.group4.paladar.Fragments.FragmentHandler;
+import com.group4.paladar.Fragments.views.EventFragment;
 import com.group4.paladar.Fragments.views.SearchFragment;
 import com.group4.paladar.Fragments.views.SettingsFragment;
 import com.group4.paladar.Navigation.ToolbarHelper;
@@ -24,7 +24,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements ToolbarHe
     private UserHelper userHelper = new UserHelper();
 
     //Navigation tools
-    private ToolbarHelper toolbarHelper = new ToolbarHelper();
+    public ToolbarHelper toolbarHelper = new ToolbarHelper();
 
     //Fragment Handler changes the content field
     //aka changes between different views
@@ -93,8 +93,6 @@ public class MainActivity extends FirebaseLoginBaseActivity implements ToolbarHe
         //change sign in navigation item Text to sign out
         toolbarHelper.setSignOut();
 
-
-
     }
 
     //called when logout was successful
@@ -137,7 +135,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements ToolbarHe
 
     @Override
     public void onCreateEvent() {
-
+        fHandler.changeViewWithBackStack(new EventFragment());
     }
 
     @Override
@@ -167,12 +165,16 @@ public class MainActivity extends FirebaseLoginBaseActivity implements ToolbarHe
 
     }
 
-    /* User Prefernces has been updated localy need to send changes to server also!
-    @Override
-    public void onNewPreference(Preference preference, Object newValue) {
-        Toast.makeText(this,"prefsupdate",Toast.LENGTH_SHORT).show();
-    }
-*/
   /*  -------------------------------- OTHER ------------------------------------------------- */
 
+    @Override
+    public void onBackPressed() {
+
+        if (toolbarHelper.getNavigationDrawer().isDrawerOpen()){
+            toolbarHelper.getNavigationDrawer().closeDrawer();
+            return;
+        }
+
+        super.onBackPressed();
+    }
 }

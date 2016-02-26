@@ -47,4 +47,14 @@ public class FragmentHandler {
    }
 
 
+    public  boolean popStack(){
+
+        if (fManager.getBackStackEntryCount() > 0) {
+            fManager.popBackStack();
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 }
