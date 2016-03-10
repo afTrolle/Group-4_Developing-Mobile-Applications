@@ -8,6 +8,7 @@ import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.group4.paladar.FireBaseStructures.user.UserFirebase;
 import com.group4.paladar.MainActivity;
 import com.group4.paladar.Navigation.ToolbarHelper;
@@ -65,7 +66,6 @@ public class UserHelper {
                     mActivity.toolbarHelper.enableChefOptions();
                 }
                 setPreferences(user, mActivity);
-
 
                 //TODO UPDATE USER Navigation item here!
                 //generate user profile header for navigation drawer
@@ -164,4 +164,19 @@ public class UserHelper {
 
         }
     }
+
+
+
+    public static void getUserInformation(String uid, ValueEventListener listener ){
+
+        Firebase ref = new Firebase("https://paladar-android.firebaseio.com/users").child(uid);
+        ref.addListenerForSingleValueEvent(listener);
+    }
+
+    public static  void setUserInformation(String uid, UserFirebase user) {
+
+        Firebase ref = new Firebase("https://paladar-android.firebaseio.com/users").child(uid);
+        ref.setValue(user);
+    }
+
 }

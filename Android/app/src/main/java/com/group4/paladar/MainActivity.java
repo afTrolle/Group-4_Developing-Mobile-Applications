@@ -1,6 +1,8 @@
 package com.group4.paladar;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
@@ -16,6 +18,7 @@ import com.group4.paladar.Fragments.views.EventFragment;
 import com.group4.paladar.Fragments.views.SearchFragment;
 import com.group4.paladar.Fragments.views.SettingsFragment;
 import com.group4.paladar.Navigation.ToolbarHelper;
+import com.group4.paladar.Utils.ImageHandler;
 
 public class MainActivity extends FirebaseLoginBaseActivity implements ToolbarHelper.onNavigationItemClicked, SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -28,10 +31,11 @@ public class MainActivity extends FirebaseLoginBaseActivity implements ToolbarHe
 
     //Fragment Handler changes the content field
     //aka changes between different views
-    private FragmentHandler fHandler = new FragmentHandler();
+    public FragmentHandler fHandler = new FragmentHandler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         firebaseHelper.onCreate(this);
@@ -44,7 +48,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements ToolbarHe
         if (savedInstanceState == null){
 
             fHandler.openFragment(new SearchFragment());
-            Toast.makeText(this,"open Search",Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(this,"open Search",Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -115,7 +119,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements ToolbarHe
         //called when navigation items are clicked!
     @Override
     public void onSearch() {
-
+        fHandler.ChangeView(new SearchFragment());
     }
 
     @Override
@@ -159,7 +163,7 @@ public class MainActivity extends FirebaseLoginBaseActivity implements ToolbarHe
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Toast.makeText(this,"prefsupdate",Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(this,"prefsupdate",Toast.LENGTH_SHORT).show();
         userHelper.newPreferenceSet(sharedPreferences,  key,this);
 
 
@@ -176,5 +180,26 @@ public class MainActivity extends FirebaseLoginBaseActivity implements ToolbarHe
         }
 
         super.onBackPressed();
+    }
+
+
+ /********************************  *********************************************/
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode){
+            case ImageHandler.RESULT_LOAD_IMAGE:
+
+                if (resultCode == RESULT_OK){
+                    ImageHandler.Imagerecieved(data,this);
+                } else {
+                    Toast.makeText(this,"Failed to get image", Toast.LENGTH_SHORT).show();
+                }
+                return;
+
+        }
+
     }
 }

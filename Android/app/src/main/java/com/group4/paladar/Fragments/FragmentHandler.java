@@ -15,7 +15,6 @@ public class FragmentHandler {
 
     FragmentManager fManager;
 
-
     public void onCreate(FirebaseLoginBaseActivity mActivity) {
         fManager=  mActivity.getFragmentManager();
     }

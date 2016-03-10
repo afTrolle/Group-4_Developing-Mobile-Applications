@@ -5,6 +5,10 @@
     <!-- enable use of internet / access firebase back-end  also login support -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- handling getting images! -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

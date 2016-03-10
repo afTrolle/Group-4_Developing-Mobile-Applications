@@ -196,7 +196,9 @@ public class ToolbarHelper implements Drawer.OnDrawerItemClickListener, AccountH
 
         item_search = new PrimaryDrawerItem().withName(R.string.drawer_item_search).withIcon(GoogleMaterial.Icon.gmd_search).withIdentifier(1);
         item_filter = new PrimaryDrawerItem().withName(R.string.drawer_item_filter).withIcon(GoogleMaterial.Icon.gmd_filter_list).withIdentifier(2).withSelectable(false);
+        item_filter.withEnabled(false);
         item_reservation = new PrimaryDrawerItem().withName(R.string.drawer_item_reservation).withIcon(GoogleMaterial.Icon.gmd_calendar_note).withIdentifier(3);
+        item_reservation.withEnabled(false);
         //chef options
         sectionChef =  new SectionDrawerItem().withName(R.string.drawer_section_ChefOptions).withIdentifier(21);
         item_createEvent = new PrimaryDrawerItem().withName(R.string.drawer_item_createEvent).withIcon(GoogleMaterial.Icon.gmd_calendar).withIdentifier(5);
@@ -298,7 +300,5 @@ public class ToolbarHelper implements Drawer.OnDrawerItemClickListener, AccountH
         //TODO add link to settings
         return false;
     }
-
-
 
 }
